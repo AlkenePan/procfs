@@ -83,6 +83,9 @@ pub use schedstat::*;
 mod task;
 pub use task::*;
 
+mod namespace;
+pub use namespace::Namespaces;
+
 // provide a type-compatible st_uid for windows
 #[cfg(windows)]
 trait FakeMedatadataExt {
@@ -977,6 +980,11 @@ impl Process {
             }
         }
         Ok(vec)
+    }
+
+    /// Gets a Struct of namespaces for a process
+    pub fn ns(&self) -> ProcResult<Namespaces> {
+	Namespaces::namespaces(self.pid)
     }
 
     /// Lists which memory segments are written to the core dump in the event that a core dump is performed.
